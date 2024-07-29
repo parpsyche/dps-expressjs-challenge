@@ -3,6 +3,18 @@ import reportController from '../controllers/reportController';
 
 const reportRouter = express.Router();
 
-reportRouter.route('/').get(reportController.getAll);
+reportRouter.get('/special', reportController.specialReport);
+reportRouter.get('/project/:projectId', reportController.findByProjectId);
+
+reportRouter
+	.route('/')
+	.get(reportController.getAll)
+	.post(reportController.create);
+
+reportRouter
+	.route('/:id')
+	.get(reportController.findById)
+	.delete(reportController.remove)
+	.put(reportController.update);
 
 export default reportRouter;
