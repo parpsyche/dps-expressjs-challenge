@@ -63,6 +63,15 @@ function update(req: Request, res: Response) {
 	}
 }
 
+function specialReport(req: Request, res: Response) {
+	try {
+		const result = reportRepository.specialReport();
+		res.json({ status: 'success', data: result });
+	} catch (err) {
+		errorResponse(res);
+	}
+}
+
 function errorResponse(res: Response) {
 	res.status(500).json({
 		status: 'error',
@@ -77,4 +86,5 @@ export default {
 	findByProjectId,
 	remove,
 	update,
+	specialReport,
 };

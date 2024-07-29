@@ -1,6 +1,7 @@
 import db from '../services/db.service';
 import { v4 as uuidv4 } from 'uuid';
 
+const SPECIAL_REPORT_THRESHOLD = 3;
 interface Report {
 	id: string;
 	projectId: string;
@@ -48,6 +49,29 @@ function update(projectId: string, text: string, id: string) {
 	});
 }
 
+function specialReport() {
+	const data = db.query('SELECT text FROM reports') as Report[];
+	return data.filter(hasFrequentWords);
+}
+
+function hasFrequentWords(item: Report) {
+	type HashType = { [key: string]: number };
+	const counts: HashType = {};
+	const words = item.text.split(' ');
+	for (let i = 0; i < words.length; i++) {
+		const word = words[i].toLowerCase();
+		if (word in counts) {
+			counts[word]++;
+			if (counts[word] === SPECIAL_REPORT_THRESHOLD) {
+				return true;
+			}
+			continue;
+		}
+		counts[word] = 1;
+	}
+	return false;
+}
+
 export default {
 	getAll,
 	create,
@@ -55,4 +79,5 @@ export default {
 	findByProjectId,
 	remove,
 	update,
+	specialReport,
 };

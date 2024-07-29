@@ -3,6 +3,7 @@ import reportController from '../controllers/reportController';
 
 const reportRouter = express.Router();
 
+reportRouter.get('/special', reportController.specialReport);
 reportRouter.get('/project/:projectId', reportController.findByProjectId);
 
 reportRouter
